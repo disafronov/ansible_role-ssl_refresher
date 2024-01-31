@@ -10,18 +10,12 @@ jobs:
   update:
     runs-on: ubuntu-latest
 
-    # permissions:
-    #   actions: write
-    #   checks: write
-    #   contents: write
-
     steps:
 
       - name: Checkout sources
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          # token: ${{ secrets.PAT }}
 
       - name: Install jq
         uses: dcarbone/install-jq-action@v2.1.0
@@ -38,12 +32,6 @@ jobs:
           mkdir -p files
           wget "https://raw.githubusercontent.com/dmitriysafronov/ssl-refresher/${{ steps.git-version.outputs.tag }}/ssl-refresher" -O files/ssl-refresher
 
-      # - name: Commit all changed files back to the repository
-      #   uses: stefanzweifel/git-auto-commit-action@v4
-      #   with:
-      #     commit_message: "Automated Update. Git: ${{ steps.git-version.outputs.tag }}"
-      #     file_pattern: 'files/ssl-refresher'
-
       - uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -51,9 +39,10 @@ jobs:
           delete-branch: true
           title: "chore(deps): upgrade ssl-refresher to ${{ steps.git-version.outputs.tag }}"
           signoff: true
-          committer: "fluxcdbot <fluxcdbot@users.noreply.github.com>"
-          author: "fluxcdbot <fluxcdbot@users.noreply.github.com>"
+          committer: GitHub <noreply@github.com>
+          author: GitHub <noreply@github.com>
           commit-message: "chore(deps): upgrade ssl-refresher to ${{ steps.git-version.outputs.tag }}"
           body: |
             Release notes: https://github.com/dmitriysafronov/ssl-refresher/releases/tag/${{ steps.git-version.outputs.tag }}
           draft: false
+          assignees: ${{ github.repository_owner }}
