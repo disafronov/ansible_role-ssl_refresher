@@ -1,0 +1,69 @@
+---
+
+- name: Install rsync
+  ansible.builtin.package:
+    name: rsync
+    state: present
+
+- name: Create config directory for ssl-refresher
+  ansible.builtin.file:
+    path: /etc/opt/ssl-refresher
+    state: directory
+    mode: '0700'
+    owner: root
+    group: root
+
+- name: Create config for ssl-refresher
+  ansible.builtin.copy:
+    content: |
+      REMOTE_SERVER={{ ssl_refresher.remote_server }}
+      REMOTE_USER={{ ssl_refresher.remote_user }}
+      REMOTE_DIR={{ ssl_refresher.remote_dir }}
+    dest: /etc/opt/ssl-refresher/config
+    mode: '0600'
+    owner: root
+    group: root
+  changed_when: false
+
+- name: Set rsync_command in config for ssl-refresher
+  when:
+    - ssl_refresher.rsync_command is defined
+    - ssl_refresher.rsync_command != None
+    - ssl_refresher.rsync_command | length > 0
+  ansible.builtin.lineinfile:
+    path: /etc/opt/ssl-refresher/config
+    regexp: '^RSYNC_COMMAND\s+(.*)$'
+    line: "RSYNC_COMMAND={{ ssl_refresher.rsync_command }}"
+  changed_when: false
+
+- name: Create secret for ssl-refresher
+  ansible.builtin.copy:
+    content: |
+      {{ ssl_refresher.secret }}
+    dest: /etc/opt/ssl-refresher/secret
+    mode: '0600'
+    owner: root
+    group: root
+
+- name: Create success action for ssl-refresher
+  ansible.builtin.copy:
+    content: |
+      {{ ssl_refresher.success }}
+    dest: /etc/opt/ssl-refresher/success
+    mode: '0700'
+    owner: root
+    group: root
+
+- name: Copy ssl-refresher script with owner and permissions
+  ansible.builtin.copy:
+    src: ssl-refresher
+    dest: /usr/local/bin/ssl-refresher
+    mode: '0755'
+    owner: root
+    group: root
+
+- name: Create symbolic link for ssl-refresher in cron.hourly dir
+  ansible.builtin.file:
+    src: /usr/local/bin/ssl-refresher
+    dest: /etc/cron.hourly/ssl-refresher
+    state: link
