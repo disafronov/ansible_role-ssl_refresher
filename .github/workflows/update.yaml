@@ -39,9 +39,10 @@ jobs:
           delete-branch: true
           title: "chore(deps): upgrade ssl-refresher to ${{ steps.git-version.outputs.tag }}"
           signoff: true
-          committer: "fluxcdbot <fluxcdbot@users.noreply.github.com>"
-          author: "fluxcdbot <fluxcdbot@users.noreply.github.com>"
+          committer: GitHub <noreply@github.com>
+          author: GitHub <noreply@github.com>
           commit-message: "chore(deps): upgrade ssl-refresher to ${{ steps.git-version.outputs.tag }}"
           body: |
             Release notes: https://github.com/dmitriysafronov/ssl-refresher/releases/tag/${{ steps.git-version.outputs.tag }}
           draft: false
+          assignees: ${{ github.repository_owner }}
