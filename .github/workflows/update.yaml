@@ -38,11 +38,11 @@ jobs:
           mkdir -p files
           wget "https://raw.githubusercontent.com/dmitriysafronov/ssl-refresher/${{ steps.git-version.outputs.tag }}/ssl-refresher" -O files/ssl-refresher
 
-      - name: Commit all changed files back to the repository
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: "Automated Update. Git: ${{ steps.git-version.outputs.tag }}"
-          file_pattern: 'files/ssl-refresher'
+      # - name: Commit all changed files back to the repository
+      #   uses: stefanzweifel/git-auto-commit-action@v4
+      #   with:
+      #     commit_message: "Automated Update. Git: ${{ steps.git-version.outputs.tag }}"
+      #     file_pattern: 'files/ssl-refresher'
 
       - uses: peter-evans/create-pull-request@v3
         with:
