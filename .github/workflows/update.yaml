@@ -27,7 +27,7 @@ jobs:
           repo: https://github.com/dmitriysafronov/ssl-refresher.git
           tag: 'v[0-9]{1,}.[0-9]{1,}.[0-9]{1,}'
 
-      - name: Save latest OCS git tag to file in repo
+      - name: Save latest [ssl-refresher] version into repo
         run: |
           mkdir -p files
           wget "https://raw.githubusercontent.com/dmitriysafronov/ssl-refresher/${{ steps.git-version.outputs.tag }}/ssl-refresher" -O files/ssl-refresher
