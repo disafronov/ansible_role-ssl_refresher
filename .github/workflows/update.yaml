@@ -35,10 +35,14 @@ jobs:
 
       - name: Save latest OCS git tag to file in repo
         run: |
-          echo "${{ steps.git-version.outputs.tag }}" > .git-version
+          mkdir -p templates
+          echo "{{ ansible_managed | comment }}" > templates/ssl-refresher.j2
+          wget https://raw.githubusercontent.com/dmitriysafronov/ssl-refresher/${{ steps.git-version.outputs.tag }}/ssl-refresher" -O .ssl-refresher
+          cat .ssl-refresher >> templates/ssl-refresher.j2
+          rm -f .ssl-refresher
 
       - name: Commit all changed files back to the repository
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: "Automated Update. Git: ${{ steps.git-version.outputs.tag }}"
-          file_pattern: '.git-version'
+          file_pattern: 'templates/ssl-refresher.j2'
