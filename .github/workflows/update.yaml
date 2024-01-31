@@ -1,0 +1,44 @@
+name: Update
+
+"on": 
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+
+  update:
+    runs-on: ubuntu-latest
+
+    permissions:
+      actions: write
+      checks: write
+      contents: write
+
+    steps:
+
+      - name: Checkout sources
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.PAT }}
+
+      - name: Install jq
+        uses: dcarbone/install-jq-action@v2.1.0
+
+      - name: Get latest [ssl-refresher] git tag
+        uses: dmitriysafronov/find-latest-tag@v1.0.0
+        id: git-version
+        with:
+          repo: https://github.com/dmitriysafronov/ssl-refresher.git
+          tag: 'v[0-9]{1,}.[0-9]{1,}.[0-9]{1,}'
+
+      - name: Save latest OCS git tag to file in repo
+        run: |
+          echo "${{ steps.git-version.outputs.tag }}" > .git-version
+
+      - name: Commit all changed files back to the repository
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Automated Update. Git: ${{ steps.git-version.outputs.tag }}"
+          file_pattern: '.git-version'
