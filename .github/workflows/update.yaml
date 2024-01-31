@@ -37,7 +37,7 @@ jobs:
         run: |
           mkdir -p templates
           echo "{{ ansible_managed | comment }}" > templates/ssl-refresher.j2
-          wget https://raw.githubusercontent.com/dmitriysafronov/ssl-refresher/${{ steps.git-version.outputs.tag }}/ssl-refresher" -O .ssl-refresher
+          wget "https://raw.githubusercontent.com/dmitriysafronov/ssl-refresher/${{ steps.git-version.outputs.tag }}/ssl-refresher" -O .ssl-refresher
           cat .ssl-refresher >> templates/ssl-refresher.j2
           rm -f .ssl-refresher
 
