@@ -18,7 +18,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install jq
-        uses: dcarbone/install-jq-action@v2.1.0
+        uses: dcarbone/install-jq-action@v3.0.1
 
       - name: Get latest [ssl-refresher] git tag
         uses: dmitriysafronov/find-latest-tag@v1.0.0
