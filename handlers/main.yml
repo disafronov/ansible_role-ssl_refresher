@@ -1,0 +1,6 @@
+---
+
+- name: Run sync
+  ansible.builtin.shell: |
+    /etc/cron.hourly/ssl-refresher
+  changed_when: true

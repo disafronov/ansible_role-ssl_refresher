@@ -67,3 +67,4 @@
     src: /usr/local/bin/ssl-refresher
     dest: /etc/cron.hourly/ssl-refresher
     state: link
+  notify: Run sync
